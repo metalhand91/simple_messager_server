@@ -52,8 +52,9 @@ class LogOutHandler(tornado.web.RequestHandler):
         
 
 class EchoHandler(tornado.web.RequestHandler):
-    def get(self): #post(self):
-        self.write("EchoHandler work!")
+    def post(self):
+        print(self.request)
+        self.write(self.request.body)
 
 
 def make_app():
