@@ -1,3 +1,4 @@
+import string, random
 from datetime import datetime
 
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Text, DateTime, ForeignKey
@@ -19,6 +20,10 @@ class User(Base):
     def __init__(self, username, password):
         self.username = username
         self.password = password
+    
+    def set_access_token(self):
+        sequence = string.ascii_lowercase + string.digits + string.punctuation
+        self.access_token = ''.join(random.choice(sequence) for x in range(64))
 
 
 class Message(Base):
@@ -29,6 +34,6 @@ class Message(Base):
     text = Column(Text, nullable=False)
     date_time = Column(DateTime, default=datetime.now())
 
-#engine = create_engine('sqlite:///simple_messeger.db')
-#metadata = Base.metadata
-#metadata.create_all(engine)
+engine = create_engine('sqlite:///simple_messeger.db')
+metadata = Base.metadata
+metadata.create_all(engine)

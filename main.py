@@ -1,4 +1,4 @@
-#curl -v -d "username=frompost4&password=000000" http://127.0.0.1:8888/register/
+#curl -v -d "username=world&password=pass" http://127.0.0.1:8888/register/
 
 import tornado.web
 from sqlalchemy import create_engine
@@ -42,8 +42,18 @@ class RegisterHandler(tornado.web.RequestHandler):
 
 
 class LogInHandler(tornado.web.RequestHandler):
-    def get(self): #post(self):
-        self.write("LogInHandler work!")
+    def post(self):
+        username = self.get_argument('username')
+        password = self.get_argument('password')
+        user = session.query(User).filter_by(username = username)\
+                .one_or_none()
+        if user and user.password == password:
+            user.set_access_token()
+            print(user.access_token)
+            session.commit()
+            self.write(user.access_token)
+        else:
+            self.set_status(205, 'wrong username or password')
 
 
 class LogOutHandler(tornado.web.RequestHandler):
