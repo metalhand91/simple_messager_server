@@ -1,4 +1,4 @@
-#curl -v -d "username=world&password=pass" http://127.0.0.1:8888/register/
+#curl -v -d "username=world&password=pass&email=email@email.com" http://127.0.0.1:8888/register/
 
 import tornado.web
 from sqlalchemy import create_engine
@@ -25,13 +25,14 @@ class RegisterHandler(tornado.web.RequestHandler):
         # Получение имени пользователя и пароля из post запроса.
         username = self.get_argument('username')
         password = self.get_argument('password')
-        print(username, password)
+        email = self.get_argument('email')
+        print(username, password, email)
         
         # Проверка на существовние пользователя.
         if not session.query(User).filter_by(username = username)\
                 .one_or_none():
             # Создание пользователя и сохранение.
-            user = User(username, password)
+            user = User(username, password, email)
             session.add(user)
             session.commit()
             print('user', username, 'with password', password, 'created')

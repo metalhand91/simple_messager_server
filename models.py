@@ -14,12 +14,14 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String(40), nullable=False, unique=True)
     password = Column(String(128), nullable=False)
+    email = Column(String(128), nullable=False)
     register_date =  Column(DateTime, default=datetime.now())
     access_token = Column(String(64), nullable=True)
     
-    def __init__(self, username, password):
+    def __init__(self, username, password, email):
         self.username = username
         self.password = password
+        self.email = email
     
     def set_access_token(self):
         sequence = string.ascii_lowercase + string.digits + string.punctuation
